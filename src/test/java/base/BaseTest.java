@@ -10,7 +10,7 @@ import org.springframework.test.context.web.ServletTestExecutionListener;
 
 /**
  * Created by vector01.yao on 2017/5/18.
- * 用于bill系统单元测试
+ * 用于系统单元测试
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext-test.xml" }, inheritLocations = true)

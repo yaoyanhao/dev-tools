@@ -9,7 +9,7 @@ import utils.DataBaseHelper;
 
 /**
  * Created by vector01.yao on 2017/5/18.
- * bill系统单元测试执行监听，处理类or方法的前置操作和后置操作
+ * 单元测试执行监听，处理类or方法的前置操作和后置操作
  * [注]：不创建数据库，直接使用db.properties文件配置的数据库作为testcase的数据库
  */
 public class CustomTestExecutionListener extends AbstractTestExecutionListener {
