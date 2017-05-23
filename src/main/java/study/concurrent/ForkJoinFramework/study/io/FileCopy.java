@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Date;
 
 /**
  * Created by vector01.yao on 2017/5/23.
@@ -14,17 +15,21 @@ public class FileCopy {
 
     public static void main(String[] args) {
         FileCopy fileCopy=new FileCopy();
-        //fileCopy.bufferedReaderCopy("D:\\模板038.pptx","E:",null);
+        long start=new Date().getTime();
+        //bufferedReader方式，字符流，使用与文本文件
+        //fileCopy.bufferedReaderCopy("D:\\abc.txt","E:",null);
 
-        //fileCopy.bufferedStreamCopy("D:\\模板038.pptx","E:",null);
+        //BufferedStream方式
+        fileCopy.bufferedStreamCopy("D:\\software\\ideaIU-2016.3.5.exe","E:",null);
 
-
-        fileCopy.fileChannelCopy("D:\\模板038.pptx","E:",null);
-        System.out.println("复制文件成功!");
+        //NIO方式
+        //fileCopy.fileChannelCopy("D:\\software\\ideaIU-2016.3.5.exe","E:","idea.exe");
+        long time=new Date().getTime()-start;
+        System.out.println("复制文件成功!耗时:"+time);
     }
 
     /**
-     * FileInputStream方式复制文件
+     * BufferedReader方式复制文件
      * @param sourceFilePath 源文件地址
      * @param targetPath 目标目录
      * @param alias 别名
@@ -40,8 +45,7 @@ public class FileCopy {
             dir.mkdir();
         }
 
-        //
-        String fileName=sourceFilePath.substring(sourceFilePath.indexOf("\\"));//文件名
+        String fileName=sourceFilePath.substring(sourceFilePath.lastIndexOf("\\"));//文件名
         File inFile=new File(sourceFilePath);
         String targetFileStr=targetPath+"\\";//目标文件
         if (StringUtils.isBlank(alias)){
@@ -70,28 +74,6 @@ public class FileCopy {
         }
     }
 
-    private void dispose(Reader reader){
-        try {
-            if (reader!=null){
-                reader.close();
-            }
-        }catch (IOException e){
-            throw new RuntimeException("关闭Reader失败！");
-        }
-    }
-
-    private void dispose(Writer writer){
-        try {
-            if (writer!=null){
-                writer.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //-------------------------------------
-
     public void bufferedStreamCopy(String sourceFilePath,String targetPath,String alias){
         //参数验证
         if (StringUtils.isBlank(sourceFilePath)||StringUtils.isBlank(targetPath)){
@@ -103,7 +85,7 @@ public class FileCopy {
         }
 
         //
-        String fileName=sourceFilePath.substring(sourceFilePath.indexOf("\\"));//文件名
+        String fileName=sourceFilePath.substring(sourceFilePath.lastIndexOf("\\"));//文件名
         File inFile=new File(sourceFilePath);
         String targetFileStr=targetPath+"\\";//目标文件
         if (StringUtils.isBlank(alias)){
@@ -122,13 +104,52 @@ public class FileCopy {
             while ((b=bufferedInputStream.read())!=-1){
                 bufferedOutputStream.write(b);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("复制文件发生异常！异常信息：",e);
         } finally {
             dispose(bufferedInputStream);
             dispose(bufferedOutputStream);
+        }
+    }
+
+    //FileChannel方式
+    public void fileChannelCopy(String sourceFilePath,String targetPath,String alias){
+        //参数验证
+        if (StringUtils.isBlank(sourceFilePath)||StringUtils.isBlank(targetPath)){
+            throw new RuntimeException("参数sourceFile或targetDir不能为空！");
+        }
+        File dir=new File(targetPath);//检查目录是否存在，否则创建目录
+        if (!dir.exists()){
+            dir.mkdir();
+        }
+
+        //
+        String fileName=sourceFilePath.substring(sourceFilePath.lastIndexOf("\\"));//文件名
+        File inFile=new File(sourceFilePath);
+        String targetFileStr=targetPath+"\\";//目标文件
+        if (StringUtils.isBlank(alias)){
+            targetFileStr+=fileName;
+        }else {
+            targetFileStr+=alias;
+        }
+        File outFile=new File(targetFileStr);
+
+        FileChannel inChannel;
+        FileChannel outChannel;
+        try {
+            inChannel=new FileInputStream(inFile).getChannel();
+            outChannel=new FileOutputStream(outFile).getChannel();
+            ByteBuffer byteBuffer=ByteBuffer.allocate(1024);
+//            while (inChannel.read(byteBuffer)!=-1){//将数据倒到缓冲器中
+//                byteBuffer.flip();//准备写入
+//                outChannel.write(byteBuffer);//将buffer中的数据先写入
+//                byteBuffer.clear();//writer操作之后，数据仍然存在于byteBuffer中，清空
+//            }
+            inChannel.transferTo(0,inChannel.size(),outChannel);
+            inChannel.close();
+            outChannel.close();
+        } catch (IOException e) {
+            throw new RuntimeException("复制文件发生异常！异常信息：",e);
         }
     }
 
@@ -153,45 +174,22 @@ public class FileCopy {
         }
     }
 
-    //FileChannel方式
 
-    public void fileChannelCopy(String sourceFilePath,String targetPath,String alias){
-        //参数验证
-        if (StringUtils.isBlank(sourceFilePath)||StringUtils.isBlank(targetPath)){
-            throw new RuntimeException("参数sourceFile或targetDir不能为空！");
-        }
-        File dir=new File(targetPath);//检查目录是否存在，否则创建目录
-        if (!dir.exists()){
-            dir.mkdir();
-        }
-
-        //
-        String fileName=sourceFilePath.substring(sourceFilePath.indexOf("\\"));//文件名
-        File inFile=new File(sourceFilePath);
-        String targetFileStr=targetPath+"\\";//目标文件
-        if (StringUtils.isBlank(alias)){
-            targetFileStr+=fileName;
-        }else {
-            targetFileStr+=alias;
-        }
-        File outFile=new File(targetFileStr);
-
-        FileChannel inChannel;
-        FileChannel outChannel;
+    private void dispose(Reader reader){
         try {
-            inChannel=new FileInputStream(inFile).getChannel();
-            outChannel=new FileOutputStream(outFile).getChannel();
-            ByteBuffer byteBuffer=ByteBuffer.allocate(1024);
-//            while (inChannel.read(byteBuffer)!=-1){//将数据倒到缓冲器中
-//                byteBuffer.flip();//准备写入
-//                outChannel.write(byteBuffer);//将buffer中的数据先写入
-//                byteBuffer.clear();//writer操作之后，数据仍然存在于byteBuffer中，清空
-//            }
-            inChannel.transferTo(0,inChannel.size(),outChannel);
-            inChannel.close();
-            outChannel.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            if (reader!=null){
+                reader.close();
+            }
+        }catch (IOException e){
+            throw new RuntimeException("关闭Reader失败！");
+        }
+    }
+
+    private void dispose(Writer writer){
+        try {
+            if (writer!=null){
+                writer.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
