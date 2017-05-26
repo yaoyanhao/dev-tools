@@ -1,4 +1,4 @@
-package study.concurrent.ForkJoinFramework.study.concurrent.Lock;
+package study.concurrent.Lock;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;

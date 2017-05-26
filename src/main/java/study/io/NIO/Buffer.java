@@ -1,4 +1,4 @@
-package study.concurrent.ForkJoinFramework.study.io;
+package study.io.NIO;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +15,7 @@ import java.nio.channels.FileChannel;
  * 3.从Buffer中将数据读入Channel中（写文件时使用）
  * 4.情况Buffer中的数据：从而可以继续写入数据   clear()：完全清空  compact()：只清除已读取的数据
  */
-public class NIO {
+public class Buffer {
     public static void main(String[] args) {
         File file=new File("D:\\NIO.txt");
         File targetFile=new File("D:\\NIO_CP.txt");

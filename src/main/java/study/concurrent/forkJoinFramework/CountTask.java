@@ -1,4 +1,4 @@
-package study.concurrent.ForkJoinFramework;
+package study.concurrent.forkJoinFramework;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;

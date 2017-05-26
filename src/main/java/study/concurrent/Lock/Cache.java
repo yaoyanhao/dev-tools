@@ -1,4 +1,4 @@
-package study.concurrent.ForkJoinFramework.study.concurrent.Lock;
+package study.concurrent.Lock;
 
 import java.util.HashMap;
 import java.util.Map;
