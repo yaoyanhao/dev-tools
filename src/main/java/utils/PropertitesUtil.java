@@ -65,4 +65,8 @@ public class PropertitesUtil {
         }
         return result;
     }
+
+    public static void main(String[] args) {
+        logger.error("abc");
+    }
 }
