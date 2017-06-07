@@ -12,53 +12,38 @@ import java.util.concurrent.CountDownLatch;
  * 3.当CountDownLatch对象计数为0时，主线程之外的线程都执行完毕，主线程继续执行。
  */
 public class TestCountDownLatch {
-    private static CountDownLatch countDownLatch=new CountDownLatch(2);//2表示要等待完成线程数
-    private static CountDownLatch countDownLatch2=new CountDownLatch(1);//
+    /**
+     * 大任务拆分
+     * @param args
+     * @throws InterruptedException
+     */
     public static void main(String[] args) throws InterruptedException {
-
-        /**
-         * 应用场景1：主线程执行之前，保证其他线程执行完毕，并可以控制其他线程执行顺序
-         */
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("thread 1 is running.....");
-                countDownLatch.countDown();//CountDownLatch计数减1
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("thread 2 is running....");
-                countDownLatch.countDown();//CountDownLatch计数减1
-            }
-        }).start();
-        countDownLatch.await();
-        System.out.println("all other thread has finished!");
-
-        /**
-         * 应用场景2：实现最大的并行性
-         * 如我们想同时启动多个线程，让多个线程同时并发，我们只需要实例化一个count为1的CountDownLatch，
-         * 在各个线程中调用CountDownLatch的await，等到所有线程启动完成，在外部线程CountDown，让所有线程同时并发
-         */
-        for (int i=0;i<100;i++){
-            new Thread(new InnerClass(),"thread"+i).start();
+        CountDownLatch countDownLatch=new CountDownLatch(10);
+        for (int i=0;i<10;i++){//假设一个任务分为10个部分
+            new Thread(new DepartWorker(countDownLatch,i)).start();
         }
-        countDownLatch2.countDown();//
+        countDownLatch.await();//等待各个子任务都完成
+        System.out.println("所有任务都已完成");
+    }
+}
 
+//处理
+class DepartWorker implements Runnable{
+    private int partId;
+    private CountDownLatch countDownLatch;
+
+    DepartWorker(CountDownLatch countDownLatch,int partId){
+        this.countDownLatch=countDownLatch;
+        this.partId=partId;
     }
 
-    static class InnerClass implements Runnable{
+    @Override
+    public void run() {
+        doWork(partId);
+        countDownLatch.countDown();
+    }
 
-        @Override
-        public void run() {
-            try {
-                countDownLatch2.await();//等待
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(Thread.currentThread().getName()+"is runnning..");
-        }
+    private void doWork(int partId){
+        System.out.println("正在处理第"+partId+"部分....");
     }
 }
