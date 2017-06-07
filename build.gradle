@@ -20,6 +20,4 @@ dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.14'
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
 
-
-
 }
