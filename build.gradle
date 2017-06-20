@@ -11,13 +11,38 @@ repositories {
 }
 
 dependencies {
+    def springVersion="4.3.0.RELEASE"
     testCompile group: 'junit', name: 'junit', version: '4.11'
-    compile group: 'org.springframework', name: 'spring-test', version: '4.3.0.RELEASE'
+
+    //Spring相关依赖
+    compile("org.springframework:spring-aop:$springVersion",
+            "org.springframework:spring-orm:$springVersion",
+            "org.springframework:spring-jdbc:$springVersion",
+            "org.springframework:spring-instrument-tomcat:$springVersion",
+            "org.springframework:spring-instrument:$springVersion",
+            "org.springframework:spring-framework-bom:$springVersion",
+            "org.springframework:spring-expression:$springVersion",
+            "org.springframework:spring-core:$springVersion",
+            "org.springframework:spring-context-support:$springVersion",
+            "org.springframework:spring-context:$springVersion",
+            "org.springframework:spring-beans:$springVersion",
+            "org.springframework:spring-aspects:$springVersion",
+            "org.springframework:spring-test:$springVersion",
+            "org.springframework:spring-tx:$springVersion",
+            "org.springframework:spring-web:$springVersion",
+            "org.springframework:spring-webmvc:$springVersion",
+            "org.springframework:spring-webmvc-portlet:$springVersion")
+
+    //apache.commons依赖
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
 
     //日志：slf4j+log4j
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'log4j', name: 'log4j', version: '1.2.14'
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+
+    //redis
+    compile group: 'redis.clients', name: 'jedis', version: '2.7.3'
+    compile group: 'org.springframework.data', name: 'spring-data-redis', version: '1.8.4.RELEASE'
 
 }
