@@ -9,13 +9,24 @@ import redis.clients.jedis.JedisPoolConfig;
  * Jedis工具类
  */
 public class JedisUtil {
+
     private static String REDIS_HOST="10.199.201.229";
     private static int REDIS_PORT=6379;
     private static String REDIS_PWD=null;
 
+    /** 最大空闲连接数：空闲连接超过这个数，将回收 */
     private static int MAX_IDLE=300;
+    /** 最小空闲连接数：空闲连接小于这个数，将创建新的连接 */
+    private static int MIN_IDLE=5;
+    /** 最大连接数：能够同时建立的最大连接个数 */
     private static int MAX_ACTIVE=600;
+    /** 最大等待时间（毫秒）获取连接时间超过这个时间，将抛错 */
     private static int MAX_WAIT=1000;
+    /** //使用连接时，检测连接是否成功 */
+    boolean testOnBorrow=true;
+    /**返回连接时，检测连接是否成功*/
+    boolean testOnReturn=true;
+
     private static int TIMEOUT=1000;
 
     private static volatile JedisPool jedisPool;
@@ -50,19 +61,20 @@ public class JedisUtil {
      * @param maxIdle
      * @param maxWait
      * @param testOnBorrow
-     * @param timeOut
      * @return
      */
-    public static JedisPool getJedisPool(String redisHost,int redisPort,int maxActive,int maxIdle,int maxWait,boolean testOnBorrow,int timeOut){
+    public static JedisPool getJedisPool(String redisHost,int redisPort,int maxActive,int minIdle,int maxIdle,int maxWait,boolean testOnBorrow,boolean testOnReturn){
         if (jedisPool==null){
             synchronized (JedisUtil.class){
                 if (jedisPool==null){
                     JedisPoolConfig config = new JedisPoolConfig();
                     config.setMaxTotal(maxActive);
+                    config.setMinIdle(minIdle);
                     config.setMaxIdle(maxIdle);
                     config.setMaxWaitMillis(maxWait);
                     config.setTestOnBorrow(testOnBorrow);
-                    jedisPool = new JedisPool(config, redisHost, redisPort, timeOut);
+                    config.setTestOnReturn(testOnReturn);
+                    jedisPool = new JedisPool(config, redisHost, redisPort);
                 }
             }
         }
@@ -93,5 +105,4 @@ public class JedisUtil {
             getJedisPool(hostName,port).returnResource(jedis);
         }
     }
-
 }

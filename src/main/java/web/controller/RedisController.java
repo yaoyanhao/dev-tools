@@ -25,8 +25,8 @@ public class RedisController {
         User user=new User();
         user.setUserId("123");
         user.setUserName("123423");
-        redisManager.addUser("user1",user);
+        redisManager.set("user1",user.toString());
         logger.error("写入redis成功！");
-        return redisManager.getUser("user1");
+        return redisManager.get("user1");
     }
 }
