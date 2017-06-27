@@ -19,54 +19,37 @@ public class PropertitesUtil {
 
     private static Logger logger= LoggerFactory.getLogger(PropertitesUtil.class);
 
-    /**
-     * 获取properties内容
-     *
-     * @param location 属性文件位置
-     * @return String
-     */
-    public static String resolveDbConfig(String location) {
+    public static Map<String,String> resolveDbConfig(String location) {
+        if (StringUtils.isBlank(location)){
+            logger.error("resolve properties file error:location is null!");
+            throw new RuntimeException("resolve properties file error:location is null!");
+        }
+
+        Map<String,String> propertyMap=new HashMap<String,String>();
         InputStream is = DataBaseHelper.class.getClassLoader().getResourceAsStream(location);
         InputStreamReader reader = null;
         BufferedReader br = null;
         if (is != null) {
-            StringBuilder sb = new StringBuilder();
-            String line = null;
+            String line;
             try {
                 reader = new InputStreamReader(is, "utf-8");
                 br = new BufferedReader(reader);
                 while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
+                    if (StringUtils.isBlank(line)||line.startsWith("#")){
+                        continue;
+                    }
+                    propertyMap.put(StringUtils.substringBefore(line, "="), StringUtils.substringAfter(line, "="));
                 }
             } catch (IOException e) {
                 logger.error("Could not load file from " + location + ": " + e.getMessage());
             } finally {
                 IOUtil.closeStream(is, reader, br);
             }
-            return sb.toString();
         }
-        return null;
-    }
-
-    /**
-     * properties转map
-     *
-     * @param pro
-     * @return Map<String, Object>
-     */
-    public static Map<String, Object> propertiesToMap(String pro) {
-        if (StringUtils.isBlank(pro)) {
-            return new HashMap<String, Object>();
-        }
-        String[] strArray = pro.split("\n");
-        Map<String, Object> result = new HashMap<String, Object>();
-        for (String str : strArray) {
-            result.put(StringUtils.substringBefore(str, "="), StringUtils.substringAfter(str, "="));
-        }
-        return result;
+        return propertyMap;
     }
 
     public static void main(String[] args) {
-        logger.error("abc");
+        System.out.println(resolveDbConfig("redis.properties"));
     }
 }
