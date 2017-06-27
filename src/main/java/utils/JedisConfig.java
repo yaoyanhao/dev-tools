@@ -44,7 +44,7 @@ public class JedisConfig {
         MAX_ACTIVE=Integer.valueOf(redisConfigMap.get("redis.maxActive"));
         MAX_IDLE=Integer.valueOf(redisConfigMap.get("redis.maxIdle"));
         MAX_WAIT=Integer.valueOf(redisConfigMap.get("redis.maxWait"));
-        TEST_ON_BORROW=Boolean.parseBoolean("redis.redis.testOnBorrow");
+        TEST_ON_BORROW=Boolean.parseBoolean("jedis.jedis.testOnBorrow");
         TEST_ON_RETURN=Boolean.parseBoolean("redis.testOnReturn");
     }
 

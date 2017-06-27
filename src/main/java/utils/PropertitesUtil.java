@@ -48,8 +48,4 @@ public class PropertitesUtil {
         }
         return propertyMap;
     }
-
-    public static void main(String[] args) {
-        System.out.println(resolveDbConfig("redis.properties"));
-    }
 }

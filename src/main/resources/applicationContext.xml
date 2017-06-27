@@ -8,15 +8,15 @@
 
     <context:property-placeholder location="classpath:redis.properties"/>
 
-    <!--<bean id="defaultJedisManager" class="web.manager.impl.DefaultRedisManager" init-method="initJedisPool">-->
-        <!--<property name="redisHost" value="${redis.host}"/>-->
-        <!--<property name="redisPort" value="${redis.port}"/>-->
-        <!--<property name="minIdle" value="${redis.minIdle}"/>-->
-        <!--<property name="maxIdle" value="${redis.maxIdle}"/>-->
-        <!--<property name="maxActive" value="${redis.maxActive}"/>-->
-        <!--<property name="maxWait" value="${redis.maxWait}"/>-->
-        <!--<property name="testOnBorrow" value="${redis.testOnBorrow}"/>-->
-        <!--<property name="testOnReturn" value="${redis.testOnReturn}"/>-->
+    <!--<bean id="defaultJedisManager" class="web.helper.redis.DefaultRedisManager" init-method="initJedisPool">-->
+        <!--<property name="redisHost" value="${jedis.host}"/>-->
+        <!--<property name="redisPort" value="${jedis.port}"/>-->
+        <!--<property name="minIdle" value="${jedis.minIdle}"/>-->
+        <!--<property name="maxIdle" value="${jedis.maxIdle}"/>-->
+        <!--<property name="maxActive" value="${jedis.maxActive}"/>-->
+        <!--<property name="maxWait" value="${jedis.maxWait}"/>-->
+        <!--<property name="testOnBorrow" value="${jedis.testOnBorrow}"/>-->
+        <!--<property name="testOnReturn" value="${jedis.testOnReturn}"/>-->
     <!--</bean>-->
 
     <!--========================Spring整合redis配置======================-->
