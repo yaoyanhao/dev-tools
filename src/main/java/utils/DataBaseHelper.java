@@ -52,7 +52,7 @@ public class DataBaseHelper {
 
 
     public static void initDB(String propertyLocation){
-        Map<String, String> propsMap = PropertitesUtil.resolveDbConfig(propertyLocation);;
+        Map<String, String> propsMap = PropertiesUtil.resolveDbConfig(propertyLocation);;
 
         if (propsMap.get(TestConstants.DBSERVER_URL) != null) {
             db_url = propsMap.get(TestConstants.DBSERVER_URL).toString();

@@ -15,10 +15,15 @@ import java.util.Map;
  * Created by vector01.yao on 2017/5/18.
  *
  */
-public class PropertitesUtil {
+public class PropertiesUtil {
+    private static final String DEFAULT = "default";
+    private static Logger logger= LoggerFactory.getLogger(PropertiesUtil.class);
 
-    private static Logger logger= LoggerFactory.getLogger(PropertitesUtil.class);
-
+    /**
+     * 获取Properties文件中的属性
+     * @param location 属性文件位置
+     * @return
+     */
     public static Map<String,String> resolveDbConfig(String location) {
         if (StringUtils.isBlank(location)){
             logger.error("resolve properties file error:location is null!");
@@ -47,5 +52,33 @@ public class PropertitesUtil {
             }
         }
         return propertyMap;
+    }
+
+    /**
+     * 获取系统变量
+     * @param key
+     * @return
+     */
+    public static String resolveSystemProperty(String key) {
+        String value = null;
+        try {
+            value = System.getProperty(key);
+        } catch (Throwable e) {
+            logger.warn("Failed to get value of property: " + key, e);
+        }
+
+        if (null == value) {
+            try {
+                value = System.getenv(key);
+            } catch (Exception e) {
+                logger.warn("Failed to get value from env : " + key, e);
+            }
+            if (null == value) {
+                value = DEFAULT;
+            }
+            return value;
+        } else {
+            return value;
+        }
     }
 }

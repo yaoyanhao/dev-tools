@@ -34,7 +34,7 @@ public class JedisConfig {
     public static boolean TEST_ON_RETURN;
 
     static {
-        Map<String,String> redisConfigMap=PropertitesUtil.resolveDbConfig(configFilePath);
+        Map<String,String> redisConfigMap= PropertiesUtil.resolveDbConfig(configFilePath);
         if (redisConfigMap.size()==0){
             throw new RuntimeException("resolve property file error! property map is empty");
         }
