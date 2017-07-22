@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by vector01.yao on 2017/7/18.
  */
-public class OutOfMemory {
+public class HeapOutOfMemory {
     public static void main(String[] args) {
         /**
          * 堆内存溢出模拟：不断创建新对象
@@ -22,5 +22,6 @@ public class OutOfMemory {
         /**
          * 虚拟机栈内存溢出模拟
          */
+
     }
 }
