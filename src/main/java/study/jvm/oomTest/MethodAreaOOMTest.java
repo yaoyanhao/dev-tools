@@ -1,4 +1,4 @@
-package study.jvm;
+package study.jvm.oomTest;
 
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;

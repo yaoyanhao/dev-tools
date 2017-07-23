@@ -1,4 +1,4 @@
-package study.jvm;
+package study.jvm.oomTest;
 
 import web.entity.User;
 

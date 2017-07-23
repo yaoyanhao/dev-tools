@@ -1,4 +1,4 @@
-package study.jvm;
+package study.jvm.oomTest;
 
 /**
  * Created by vector01.yao on 2017/7/22.

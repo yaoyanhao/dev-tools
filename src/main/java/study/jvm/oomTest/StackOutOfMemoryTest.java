@@ -1,4 +1,4 @@
-package study.jvm;
+package study.jvm.oomTest;
 
 /**
  * 设置单个线程栈容量为2M：-Xss2M
