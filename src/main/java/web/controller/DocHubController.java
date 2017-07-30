@@ -1,8 +1,10 @@
 package web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import service.DocService;
 
 /**
  * Created by vector01.yao on 2017/7/15.
@@ -10,10 +12,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class DocHubController {
 
-    @RequestMapping(value = "testRedis")
+    @Autowired
+    private DocService docService;
+
+    @RequestMapping(value = "docSearch")
     @ResponseBody
-    public String docSearch(){
-        return null;
+    public String docSearch(String keyWord){
+        try {
+            return docService.getDoc(keyWord);
+        } catch (InterruptedException e) {
+            return "fail";
+        }
     }
 
 }
