@@ -19,8 +19,8 @@ public class DocHubController {
     @ResponseBody
     public String docSearch(String keyWord){
         try {
-            return docService.getDoc(keyWord);
-        } catch (InterruptedException e) {
+            return docService.findDoc(null);
+        } catch (Exception e) {
             return "fail";
         }
     }
